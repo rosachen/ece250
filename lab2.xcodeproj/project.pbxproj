@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9828E3661DB19EDD000C679C /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9828E3651DB19EDD000C679C /* main.cpp */; };
+		9828E3741DB1A8F1000C679C /* Linear_hash_table_double_driver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9828E3721DB1A8F1000C679C /* Linear_hash_table_double_driver.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +24,12 @@
 
 /* Begin PBXFileReference section */
 		9828E3621DB19EDD000C679C /* lab2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lab2; sourceTree = BUILT_PRODUCTS_DIR; };
-		9828E3651DB19EDD000C679C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		9828E36C1DB1A8F1000C679C /* ece250.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ece250.h; sourceTree = "<group>"; };
+		9828E36D1DB1A8F1000C679C /* LinearHashTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LinearHashTable.h; sourceTree = "<group>"; };
+		9828E36E1DB1A8F1000C679C /* Exception.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Exception.h; sourceTree = "<group>"; };
+		9828E36F1DB1A8F1000C679C /* Tester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tester.h; sourceTree = "<group>"; };
+		9828E3701DB1A8F1000C679C /* Linear_hash_table_tester.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Linear_hash_table_tester.h; sourceTree = "<group>"; };
+		9828E3721DB1A8F1000C679C /* Linear_hash_table_double_driver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Linear_hash_table_double_driver.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +62,12 @@
 		9828E3641DB19EDD000C679C /* lab2 */ = {
 			isa = PBXGroup;
 			children = (
-				9828E3651DB19EDD000C679C /* main.cpp */,
+				9828E36C1DB1A8F1000C679C /* ece250.h */,
+				9828E36D1DB1A8F1000C679C /* LinearHashTable.h */,
+				9828E36E1DB1A8F1000C679C /* Exception.h */,
+				9828E36F1DB1A8F1000C679C /* Tester.h */,
+				9828E3701DB1A8F1000C679C /* Linear_hash_table_tester.h */,
+				9828E3721DB1A8F1000C679C /* Linear_hash_table_double_driver.cpp */,
 			);
 			path = lab2;
 			sourceTree = "<group>";
@@ -119,7 +129,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9828E3661DB19EDD000C679C /* main.cpp in Sources */,
+				9828E3741DB1A8F1000C679C /* Linear_hash_table_double_driver.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
