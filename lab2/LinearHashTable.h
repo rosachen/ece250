@@ -2,9 +2,9 @@
 #define LINEAR_HASH_TABLE_H
 
 /*****************************************
- * UW User ID:  uwuserid
+ * UW User ID:  s353chen
  * Submitted for ECE 250
- * Semester of Submission:  (Winter|Spring|Fall) 20NN
+ * Semester of Submission:  Fall 2016
  *
  * By submitting this file, I affirm that
  * I am the author of all modifications to
@@ -22,10 +22,10 @@ class LinearHashTable {
 		int count;
 		int power;
 		int array_size;
-        	int mod;
+        int mod;
 		T *array;
 		state *occupied;
-
+        int h( T const & , int) const;
 
 	public:
 		LinearHashTable( int = 5 );
@@ -37,58 +37,69 @@ class LinearHashTable {
 		bool member( T const & ) const;
 		T bin( int ) const;
 
-
 		void insert( T const & );
 		bool remove( T const & );
 		void clear();
 		void print() const;
 };
 
-template<typename T >
-LinearHashTable<T >::LinearHashTable( int m ):
-array_size( 1 << power ){
-	// enter your implemetation here
+template<typename T>
+LinearHashTable<T>::LinearHashTable( int m ):
+array_size( 1 << power ),
+count(0),
+power(m),
+array( new T[array_size] ),
+occupied( new state[array_size] ){
+    for ( int i = 0; i < array_size; i++ ){
+        occupied[i] = EMPTY;
+    }
 }
 
 template<typename T >
 LinearHashTable<T >::~LinearHashTable() {
+    delete [] array;
+    delete [] occupied;
 }
 
 template<typename T >
 int LinearHashTable<T >::size() const {
-    // enter your implemetation here 
-	return 0;
+    return count;
 }
 
 template<typename T >
 int LinearHashTable<T >::capacity() const {
-    // enter your implemetation here 
-	return 0;
+	return array_size;
 }
 
 template<typename T >
 double LinearHashTable<T >::load_factor() const {
-    // enter your implemetation here 
-	return 0.0;
+	return (double) size()/capacity();
 }
 
 template<typename T >
 bool LinearHashTable<T >::empty() const {
-    // enter your implemetation here 
-	return 0;
+	return size() == 0;
 }
 
+template<typename T >
+int LinearHashTable<T >::h( T const &k, int i) const {
+    return ((int)k % size() + i) % size();
+}
 
 template<typename T >
 bool LinearHashTable<T >::member( T const &obj ) const {
-	// enter your implemetation here 
+    for (int i = 0; i < capacity(); i++) {
+        int probe = h( obj, i );
+        if (occupied[probe] == OCCUPIED && array[probe] == obj) {
+            return true;
+        }
+    }
     return false;
 }
 
 template<typename T >
 T LinearHashTable<T >::bin( int n ) const {
-    // enter your implemetation here
-	return 0;
+    return array[n];
 }
 
 template<typename T >
@@ -109,7 +120,12 @@ void LinearHashTable<T >::clear() {
 
 template<typename T >
 void LinearHashTable<T >::print() const{
-	// enter your implemetation here
+    std::cout << "Displaying the contents of the bins: " << std::endl;
+    for (int i = 0; i < capacity(); i++) {
+        std::cout << array[i] << "  ";
+    }
+    std::cout << "\nEnd of bins" << std::endl;
+    return;
 }
 
 #endif
