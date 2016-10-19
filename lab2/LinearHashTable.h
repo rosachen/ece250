@@ -25,7 +25,7 @@ class LinearHashTable {
         int mod;
 		T *array;
 		state *occupied;
-        int h( T const & , int) const;
+        int h( T const & ) const;
 
 	public:
 		LinearHashTable( int = 5 );
@@ -82,17 +82,19 @@ bool LinearHashTable<T >::empty() const {
 }
 
 template<typename T >
-int LinearHashTable<T >::h( T const &k, int i) const {
-    return ((int)k % size() + i) % size();
+int LinearHashTable<T >::h( T const &k ) const {
+    return (int)k % capacity();
 }
 
 template<typename T >
 bool LinearHashTable<T >::member( T const &obj ) const {
+    int probe = h(obj);
     for (int i = 0; i < capacity(); i++) {
-        int probe = h( obj, i );
         if (occupied[probe] == OCCUPIED && array[probe] == obj) {
             return true;
         }
+        //else
+        probe = h(probe+1);
     }
     return false;
 }
@@ -102,20 +104,82 @@ T LinearHashTable<T >::bin( int n ) const {
     return array[n];
 }
 
+
 template<typename T >
 void LinearHashTable<T >::insert( T const &obj ) {
-	 // enter your implemetation here
+    if (member(obj)) {
+        return;
+    }
+    if (load_factor() <= 0.75) {
+        int probe = h(obj);
+        while (occupied[probe] == OCCUPIED) {
+            probe = h(obj + 1);
+        }
+        array[probe] = obj;
+        occupied[probe] = OCCUPIED;
+        count++;
+    }
+    else{
+        //potential memory leak
+        power++;
+        count = 0;
+        array_size *= 2;
+        T *oldarray = array;
+        array = new T[array_size];
+        occupied = new state[array_size];
+        for ( int i = 0; i < array_size; i++ ){
+            occupied[i] = EMPTY;
+        }
+        for ( int i = 0; i < array_size / 2; i++ ){
+            insert(oldarray[i]);
+        }
+        insert(obj);
+    }
 }
 
 template<typename T >
 bool LinearHashTable<T >::remove( T const &obj ) {
-	// enter your implemetation here
-	return false;
+    if (!member(obj)) {
+        return false;
+    }
+    if (load_factor() > 0.25 || power == 5) {
+        int probe = h(obj);
+        
+        while (occupied[probe] != EMPTY ) {
+            if (occupied[probe] == OCCUPIED && array[probe] == obj) {
+                occupied[probe] = DELETED;
+                count--;
+                return true;
+            }
+            probe = h(obj + 1);
+        }
+        return true;
+    }
+    else{
+        //potential memory leak
+        power--;
+        count = 0;
+        array_size = array_size/2;
+        T *oldarray = array;
+        array = new T[array_size];
+        occupied = new state[array_size];
+        for ( int i = 0; i < array_size; i++ ){
+            occupied[i] = EMPTY;
+        }
+        for ( int i = 0; i < array_size * 2; i++ ){
+            insert(oldarray[i]);
+        }
+        remove(obj);
+        return true;
+    }
 }
 
 template<typename T >
 void LinearHashTable<T >::clear() {
-	// enter your implemetation here
+    for (int i = 0; i < capacity(); i++) {
+        occupied[i] = EMPTY;
+    }
+    count = 0;
 }
 
 template<typename T >
