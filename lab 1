@@ -1,0 +1,236 @@
+#ifndef DYNAMIC_DEQUE_AS_ARRAY_H
+#define DYNAMIC_DEQUE_AS_ARRAY_H
+
+/**************************************************
+ * UW User ID: 
+ * Submitted for ECE 250
+ * Semester of Submission:  (Fall ) 2016
+ *
+ * By submitting this file, I affirm that
+ * I am the author of all modifications to 
+ * the provided code.z
+ **************************************************/
+
+
+
+#include "ece250.h"
+#include "Exception.h"
+#include <iostream>
+
+class Dynamic_deque_as_array
+{
+
+	public:
+		Dynamic_deque_as_array( int = 10 );
+		~Dynamic_deque_as_array();
+
+    int* array;
+    int head_index;
+    int tail_index;
+    int count;
+    int array_size;
+    
+    //Accessors
+		int head() const;
+		int tail() const;
+		int size() const;
+		bool empty() const;
+		int capacity() const;
+    //Mutators
+		void enqueue_head( const int & );
+		void enqueue_tail( const int & );
+		int dequeue_head();
+		int dequeue_tail();
+		void clear();
+    
+    
+};
+
+// Constructor, create a new array
+Dynamic_deque_as_array::Dynamic_deque_as_array( int n ) {
+    if (n < 1) {
+        n = 1;
+    }
+    array = new int[n];
+    head_index = 0;
+    tail_index = 0;
+    count = 0;
+    array_size = n;
+}
+
+// Destructor, deletes the memory allocated the array
+Dynamic_deque_as_array::~Dynamic_deque_as_array() {
+    delete []array;
+}
+
+
+//Return the numner of elements in the deque
+int Dynamic_deque_as_array::size() const {
+    return count;
+}
+
+
+// Return the maximum number of elements being held in the deque
+int Dynamic_deque_as_array::capacity() const {
+    return array_size;
+}
+
+
+// Check whether the deque is empty. If empty, return true
+bool Dynamic_deque_as_array::empty() const {
+    return size() == 0;
+}
+
+
+// Return the index of the head element in the deque
+// If the deque is empty, throw underflow
+int Dynamic_deque_as_array::head() const {
+    if (empty()) {
+        throw underflow();
+    }
+    else{
+        return array[head_index];
+    }
+}
+
+
+// Return the tail element of the deque
+// If the deque is empty, throw underflow
+int Dynamic_deque_as_array::tail() const {
+    if (empty()) {
+        throw underflow();
+    }
+    else{
+        return array[tail_index];
+    }
+}
+
+
+// Insert a new element to the head of the deque
+void Dynamic_deque_as_array::enqueue_head( const int &obj ) {
+    
+    // If the deque is full, double the size and copy the elements
+    // From current array to the new array
+    
+    if (size() == capacity())
+    {
+        int* new_array = new int[array_size * 2];
+        int c = 0;
+        for (int i = head_index; c < array_size; i = (i+1) % array_size)
+        {
+            new_array[c] = array[i];
+            c++;
+        }
+        head_index = 0;
+        tail_index = c;
+        array_size = 2 * capacity();
+        
+        // Delete current array, keep the new array
+        delete []array;
+        array = new_array;
+    }
+    
+        // When array size is zero, the index of enqueue head element is the initialized head index
+        if (size() ==0)
+        {
+            array[head_index] = obj;
+            count++;
+            
+        }
+        
+        else
+        {
+            if(head_index >=  1)
+                head_index = (head_index - 1) % capacity();
+            
+            // If current head_index is zero, new head_index will be capacity() - 1
+            else
+                head_index = capacity() - 1;
+            
+            array[head_index] = obj;
+            count++;
+            
+        }
+    
+}
+
+
+// Add an element at the tail of deque
+void Dynamic_deque_as_array::enqueue_tail( const int &obj ) {
+    if (size() == capacity())
+    {
+        // If the array is full, create a new array with doubled size
+        // Copy the elements in current array to the new array
+        int* new_array = new int[array_size * 2];
+        
+        int c = 0;
+        for (int i = head_index; c < array_size; i = (i+1)%array_size)
+        {
+            new_array[c] = array[i];
+            c++;
+        }
+        head_index = 0;
+        tail_index = c;
+        array_size = 2 * capacity();
+        
+        delete [] array;
+        array = new_array;
+    }
+    
+    if (size() ==0)
+    // When array size is zero, the index of enqueue tail element is the initialized tail index
+    {
+        array[tail_index] = obj;
+        count++;
+       
+    }
+        
+    else
+    {
+        
+        tail_index = (tail_index + 1) % capacity();
+        array[tail_index] = obj;
+        count++;
+        
+    }
+
+}
+
+// Remove the element at the head of the deque
+// If the array is empty, throw underflow
+int Dynamic_deque_as_array::dequeue_head() {
+    if (empty()) {
+        throw underflow();
+    }
+    else{
+        int removed = array[head_index];
+        head_index = (head_index + 1) % array_size;
+        count--;
+        return removed;
+    }
+    }
+
+
+// Remove the element at the head of the deque
+// If the array is empty, throw underflow
+int Dynamic_deque_as_array::dequeue_tail() {
+    if (empty()) {
+        throw underflow();
+    }
+    else{
+        int removed = array[tail_index];
+        tail_index = (tail_index - 1) % capacity();
+        count--;
+        return removed;
+    }
+}
+
+//Remove all elements from deque
+void Dynamic_deque_as_array::clear() {
+    head_index = 0;
+    tail_index = 0;
+    count = 0;
+}
+
+
+#endif
